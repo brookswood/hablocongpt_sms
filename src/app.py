@@ -1,9 +1,13 @@
-from flask import Flask
+from flask import abort, Flask, request
+from functools import wraps
+from twilio.request_validator import RequestValidator
 from twilio.twiml.messaging_response import MessagingResponse
+from twilValidator import validate_twilio_request
+import os
 
 app = Flask(__name__)
 
-
+@validate_twilio_request
 @app.route("/sms", methods=['GET', 'POST'])
 def sms_reply():
     """Respond to incoming calls with a MMS message."""
