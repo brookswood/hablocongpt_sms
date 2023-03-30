@@ -1,7 +1,7 @@
 from flask import request, Response
 from functools import wraps
 from twilio.request_validator import RequestValidator
-# from twilio.twiml.messaging_response import MessagingResponse
+
 import os
 
 TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
