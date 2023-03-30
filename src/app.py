@@ -8,26 +8,26 @@ import os
 app = Flask(__name__)
 app.config['SECRET_KEY'] =  os.environ.get('SECRET_KEY')
 
-@app.route("/sms", methods=['GET', 'POST'])
-# @validate_twilio_request()
-def sms_reply():
-    print(f'valid signature sending message')
+# @app.route("/sms", methods=['GET', 'POST'])
+# # @validate_twilio_request()
+# def sms_reply():
+#     print(f'valid signature sending message')
 
-    """Respond to incoming calls with a MMS message."""
-    # Start our TwiML response
-    resp = MessagingResponse()
+#     """Respond to incoming calls with a MMS message."""
+#     # Start our TwiML response
+#     resp = MessagingResponse()
 
-    # Add a text message
-    msg = resp.message("The Robots are coming! Head for the hills!")
+#     # Add a text message
+#     msg = resp.message("The Robots are coming! Head for the hills!")
 
-    # Add a picture message
-    msg.media(
-        "https://farm8.staticflickr.com/7090/6941316406_80b4d6d50e_z_d.jpg"
-    )
+#     # Add a picture message
+#     msg.media(
+#         "https://farm8.staticflickr.com/7090/6941316406_80b4d6d50e_z_d.jpg"
+#     )
 
-    return str(resp)
+#     return str(resp)
 
-@app.route('/bot', methods=['POST'])
+@app.route('/sms', methods=['POST'])
 # @validate_twilio_request()
 def bot():
     incoming_msg = request.values['Body']
