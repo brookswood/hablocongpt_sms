@@ -1,4 +1,4 @@
-from flask import abort, Flask, request, Response
+from flask import request, Response
 from functools import wraps
 from twilio.request_validator import RequestValidator
 from twilio.twiml.messaging_response import MessagingResponse
@@ -16,9 +16,9 @@ def validate_twilio_request():
             twilio_signature = request.headers.get('X-Twilio-Signature')
             params = request.form
             if not twilio_signature:
-                return Response('No signature', 400)  
+                return MessagingResponse('No signature', 400)  
             elif not validator.validate(https_url, params, twilio_signature):
-                return Response('Incorrect signature', 403)
+                return MessagingResponse('Incorrect signature', 403)
             return f(*args, **kwargs)
         return decorated
     return extra
