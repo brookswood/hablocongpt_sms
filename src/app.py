@@ -6,7 +6,7 @@ from twilio.twiml.messaging_response import MessagingResponse
 from twilValidator import validate_twilio_request
 import os
 
-TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
+# TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
 
 # def validate_twilio_request():
 #     #only works in prod, sandbox validation is handled by phone number
