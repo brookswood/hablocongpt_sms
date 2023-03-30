@@ -2,7 +2,7 @@ from flask import abort, Flask, request, Response
 from functools import wraps
 from twilio.request_validator import RequestValidator
 from twilio.twiml.messaging_response import MessagingResponse
-from twilio.twiml.voice_response import VoiceResponse, Conference, Dial, Say, Gather, Record, Leave, Hangup, Pay, Prompt, Connect
+# from twilio.twiml.voice_response import VoiceResponse, Conference, Dial, Say, Gather, Record, Leave, Hangup, Pay, Prompt, Connect
 # from twilValidator import validate_twilio_request
 import os
 
@@ -27,11 +27,8 @@ def validate_twilio_request():
 app = Flask(__name__)
 
 @app.route("/sms", methods=['GET', 'POST'])
-@validate_twilio_request()
+# @validate_twilio_request()
 def sms_reply():
-    # validator = RequestValidator(os.environ.get('TWILIO_AUTH_TOKEN'))
-    # if not validator.validate(request.url, request.form, request.headers.get('X-Twilio-Signature')):
-    #     abort(400)
 
     """Respond to incoming calls with a MMS message."""
     # Start our TwiML response
