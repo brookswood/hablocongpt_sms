@@ -1,7 +1,5 @@
 from flask import Flask, request, session, abort
 from twilio.twiml.messaging_response import MessagingResponse
-# from twilio.twiml.voice_response import VoiceResponse, Conference, Dial, Say, Gather, Record, Leave, Hangup, Pay, Prompt, Connect
-# from twilValidator import validate_twilio_request
 from twilio.request_validator import RequestValidator
 from functools import wraps
 import chatbot as ch 
