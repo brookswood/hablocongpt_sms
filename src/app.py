@@ -50,7 +50,7 @@ def bot():
 
 
 @app.route('/hablar', methods=['POST'])
-# @validate_twilio_request()
+@validate_twilio_request
 def hablarbot():
     incoming_msg = request.values['Body']
     hablar_chat_log = session.get('hablar_chat_log')
