@@ -1,14 +1,39 @@
-from flask import Flask, request, session
+from flask import Flask, request, session, abort
 from twilio.twiml.messaging_response import MessagingResponse
 # from twilio.twiml.voice_response import VoiceResponse, Conference, Dial, Say, Gather, Record, Leave, Hangup, Pay, Prompt, Connect
-from twilValidator import validate_twilio_request
+# from twilValidator import validate_twilio_request
+from twilio.request_validator import RequestValidator
+from functools import wraps
 import chatbot as ch 
 import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] =  os.environ.get('SECRET_KEY')
 
+def validate_twilio_request(f):
+    """Validates that incoming requests genuinely originated from Twilio"""
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        # Create an instance of the RequestValidator class
+        validator = RequestValidator(os.environ.get('TWILIO_AUTH_TOKEN'))
+
+        # Validate the request using its URL, POST data,
+        # and X-TWILIO-SIGNATURE header
+        request_valid = validator.validate(
+            request.url,
+            request.form,
+            request.headers.get('X-TWILIO-SIGNATURE', ''))
+
+        # Continue processing the request if it's valid, return a 403 error if
+        # it's not
+        if request_valid:
+            return f(*args, **kwargs)
+        else:
+            return abort(403)
+    return decorated_function
+
 @app.route('/sms', methods=['POST'])
+@validate_twilio_request
 # @validate_twilio_request()
 def bot():
     incoming_msg = request.values['Body']
@@ -41,7 +66,7 @@ def hablarbot():
 
 
 @app.route('/sherlock', methods=['POST'])
-@validate_twilio_request()
+@validate_twilio_request
 def sherlockbot():
     incoming_msg = request.values['Body']
     sherlock_chat_log = session.get('sherlock_chat_log')
