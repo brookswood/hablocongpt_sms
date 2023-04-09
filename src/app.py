@@ -64,7 +64,7 @@ def hablarbot():
 
 @app.route('/hablar_translate', methods=['POST'])
 @validate_twilio_request
-def hablarbot():
+def hablarbot_translate():
     incoming_msg = request.values['Body']
     hablar_translate_chat_log = session.get('hablar_translate_chat_log')
 
