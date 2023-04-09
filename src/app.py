@@ -68,7 +68,7 @@ def hablarbot():
     incoming_msg = request.values['Body']
     hablar_translate_chat_log = session.get('hablar_translate_chat_log')
 
-    answer, hablar_translate_chat_log = ch.askhablar(incoming_msg, hablar_translate_chat_log)
+    answer, hablar_translate_chat_log = ch.askhablartranslate(incoming_msg, hablar_translate_chat_log)
     session['hablar_translate_chat_log'] = hablar_translate_chat_log
 
     print(answer)
