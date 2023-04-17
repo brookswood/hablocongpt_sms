@@ -8,6 +8,7 @@ import chatbot as ch
 import os
 import jarvis as jarvis
 from twilio.rest import Client
+import time 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] =  os.environ.get('SECRET_KEY')
@@ -106,6 +107,7 @@ def sms_reply():
 
             # Send each chunk as a separate SMS message
             for chunk in response_chunks:
+                time.sleep(0.02)
                 twilio_client.messages.create(
                     body=chunk,
                     from_=jarvis_phone_number,
