@@ -1,8 +1,10 @@
+from dotenv import load_dotenv
 from flask import Flask, request, session, abort
 from twilio.twiml.messaging_response import MessagingResponse
 from twilio.request_validator import RequestValidator
 from functools import wraps
 import chatbot as ch 
+from pymongo import MongoClient
 import os
 
 app = Flask(__name__)
