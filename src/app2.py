@@ -116,7 +116,7 @@ def sms_reply():
 
                 print(f'this is chunk {chunk}')
 
-    return str(resp)
+        return str(resp)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
