@@ -11,6 +11,7 @@ from twilio.rest import Client
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] =  os.environ.get('SECRET_KEY')
+jarvis_phone_number = os.environ.get('JARIVS_PHONE_NUMBER')
 
 # Load environment variables from the .env file
 load_dotenv()
@@ -81,13 +82,10 @@ def sms_reply():
             update_user(phone_number, 'stage', 'complete')
             resp.message("Registration complete! Thank you for providing your information and using J.A.R.V.I.S. from https://convoswithgpt.com/jarvis ask me a question and I'll do my best to get you an answer.  I am in beta right now and may not always respond from time to time.  Be sure to send the message \U0001F4AC of 'Hi'.  This will get my attention \U0001FAE1 so I can answer your questions.  MSG&Data rates may apply.  Reply HElP for help, STOP to cancel.")
         else:
-            # rp = MessagingResponse()
-            # try: 
-            print('sending initial response...')
             initial_response = 'gathering those details \U0001F50D \U0001F4DD \U0001F4CB now...' 
             twilio_client.messages.create(
                 body=initial_response,
-                from_=jarvis.jarvis.phone_number,
+                from_=jarvis_phone_number,
                 to=phone_number
             )
 
@@ -106,25 +104,16 @@ def sms_reply():
             # Split the response into chunks if it exceeds the maximum character limit
             response_chunks = [answer[i:i + max_chars] for i in range(0, len(answer), max_chars)]
 
-            # resp = MessagingResponse()
-            # resp.message("gathering those details now...")
-
             # Send each chunk as a separate SMS message
             for chunk in response_chunks:
                 twilio_client.messages.create(
                     body=chunk,
-                    from_=jarvis.jarvis.phone_number,
+                    from_=jarvis_phone_number,
                     to=phone_number
                 )
 
                 print(f'this is chunk {chunk}')
-                    # resp.message(chunk)
 
-                    # resp = MessagingResponse()
-                    # resp.message(answer)
-
-            # return str(resp)
-            # resp.message("Thank you using convoswithgpt.com!")
     return str(resp)
 
 if __name__ == '__main__':

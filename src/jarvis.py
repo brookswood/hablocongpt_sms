@@ -5,5 +5,3 @@ class jarvis:
     chat_log = [
         {"role":"system", "content": jarvis_log}
     ]
-
-    phone_number = ['+14846428070']
