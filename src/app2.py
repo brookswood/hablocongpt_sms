@@ -11,7 +11,7 @@ from twilio.rest import Client
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] =  os.environ.get('SECRET_KEY')
-jarvis_phone_number = os.environ.get('JARIVS_PHONE_NUMBER')
+jarvis_phone_number = os.environ.get('JARVIS_PHONE_NUMBER')
 
 # Load environment variables from the .env file
 load_dotenv()
