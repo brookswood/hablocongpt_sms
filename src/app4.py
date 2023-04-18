@@ -77,7 +77,7 @@ def update_user(phone_number, field, value):
     users.update_one({'phone_number': phone_number}, {'$set': {field: value}})
 
 @app.route('/sms', methods=['POST'])
-@validate_twilio_request
+# @validate_twilio_request
 def sms_reply():
     # Get the sender's phone number and the message body
     phone_number = request.form['From']

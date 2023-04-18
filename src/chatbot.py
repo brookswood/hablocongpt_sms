@@ -18,7 +18,7 @@ start_jarvis_chat_log = jarvis.chat_log
 start_hablar_chat_log = hablar.hablar.chat_log
 start_sherlock_chat_log = sherlock.chat_log
 start_hablar_translate_chat_log = hablar.hablarTranslate.chat_translate_log
-start_johns_chat_log = john.chat_log
+start_john1_chat_log = john.chat_log
 
 def askgpt(question, chat_log=None):
     
@@ -65,11 +65,11 @@ def asksherlock(question, sherlock_chat_log=None):
     sherlock_chat_log = sherlock_chat_log + [{'role': 'assistant', 'content': answer}]
     return answer, sherlock_chat_log
 
-def askjohn(question, johns_chat_log=None):
-    if johns_chat_log is None:
-        johns_chat_log = start_johns_chat_log
-    johns_chat_log = johns_chat_log + [{'role': 'user', 'content': question}]
-    response = completion.create(model='gpt-3.5-turbo', messages=johns_chat_log)
+def askjohn(question, john1_chat_log=None):
+    if john1_chat_log is None:
+        john1_chat_log = start_john1_chat_log
+    john1_chat_log = john1_chat_log + [{'role': 'user', 'content': question}]
+    response = completion.create(model='gpt-3.5-turbo', messages=john1_chat_log)
     answer = response.choices[0]['message']['content']
-    johns_chat_log = johns_chat_log + [{'role': 'assistant', 'content': answer}]
-    return answer, johns_chat_log
+    john1_chat_log = john1_chat_log + [{'role': 'assistant', 'content': answer}]
+    return answer, john1_chat_log
