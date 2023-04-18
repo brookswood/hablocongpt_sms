@@ -1,44 +1,21 @@
 from functools import wraps
 from flask import Flask, request, session, abort, jsonify
 from twilio.twiml.messaging_response import MessagingResponse
-from twilio.request_validator import RequestValidator
 from twilio.rest import Client
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import chatbot as ch 
 import os
-import jarvis as jarvis
+import john as john
 from twilio.rest import Client
 import time 
 
-# Load environment variables from the .env file
-load_dotenv()
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] =  os.environ.get('SECRET_KEY')
-jarvis_phone_number = os.environ.get('JARVIS_PHONE_NUMBER')
+john_phone_number = os.environ.get('JOHN_PHONE_NUMBER')
 
-def validate_twilio_request(f):
-    """Validates that incoming requests genuinely originated from Twilio"""
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        # Create an instance of the RequestValidator class
-        validator = RequestValidator(os.environ.get('TWILIO_AUTH_TOKEN'))
-
-        # Validate the request using its URL, POST data,
-        # and X-TWILIO-SIGNATURE header
-        request_valid = validator.validate(
-            request.url,
-            request.form,
-            request.headers.get('X-TWILIO-SIGNATURE', ''))
-
-        # Continue processing the request if it's valid, return a 403 error if
-        # it's not
-        if request_valid:
-            return f(*args, **kwargs)
-        else:
-            return abort(403)
-    return decorated_function
+# Load environment variables from the .env file
+load_dotenv()
 
 twilio_account_sid = os.getenv('TWILIO_ACCOUNT_SID')
 twilio_auth_token = os.getenv('TWILIO_AUTH_TOKEN')
@@ -77,7 +54,6 @@ def update_user(phone_number, field, value):
     users.update_one({'phone_number': phone_number}, {'$set': {field: value}})
 
 @app.route('/sms', methods=['POST'])
-@validate_twilio_request
 def sms_reply():
     # Get the sender's phone number and the message body
     phone_number = request.form['From']
@@ -92,7 +68,7 @@ def sms_reply():
     if user is None:
         # If the user does not exist, create a new account and ask for their name
         create_user(phone_number)
-        resp.message("It looks like you are new around here!  I'm J.A.R.V.I.S., your friendly and helpful A.I. assistant.  If you want to keep receiving messages, Please reply with your name.")
+        resp.message("It looks like you are new around here!  I'm John, your Theology Biblical Scholar and expert of the Bible.  If you want to keep receiving messages, Please reply with your name.")
     else:
         # If the user exists, check the expected input based on the user's stage
         stage = user['stage']
@@ -105,20 +81,20 @@ def sms_reply():
             # Update the user's email address and complete the registration
             update_user(phone_number, 'email', message_body)
             update_user(phone_number, 'stage', 'complete')
-            resp.message("Registration complete! Thank you for providing your information and using J.A.R.V.I.S. from https://convoswithgpt.com/jarvis ask me a question and I'll do my best to get you an answer.  I am in beta right now and may not always respond from time to time.  Be sure to send the message \U0001F4AC of 'Hi'.  This will get my attention \U0001FAE1 so I can answer your questions.  MSG&Data rates may apply.  Reply HElP for help, STOP to cancel.")
+            resp.message("Registration complete! Thank you for providing your information and using John from https://convoswithgpt.com/john ask me a question and I'll do my best to get you an answer.  I am in beta right now and may not always respond from time to time.  Be sure to send the message \U0001F4AC of 'Hi'.  This will get my attention \U0001FAE1 so I can answer your questions.  MSG&Data rates may apply.  Reply HElP for help, STOP to cancel.")
         else:
             initial_response = 'gathering those details \U0001F50D \U0001F4DD \U0001F4CB now...' 
             twilio_client.messages.create(
                 body=initial_response,
-                from_=jarvis_phone_number,
+                from_=john_phone_number,
                 to=phone_number
             )
 
             incoming_msg = request.values['Body']
-            chat_log = session.get('jarivs_chat_log')
+            chat_log = session.get('john_chat_log')
 
             answer, chat_log = ch.askgpt(incoming_msg, chat_log)
-            session['jarvis_chat_log'] = chat_log
+            session['john_chat_log'] = chat_log
     
             print(f'sending answer to {user}')
             # print(answer)
@@ -134,7 +110,7 @@ def sms_reply():
                 time.sleep(0.02)
                 twilio_client.messages.create(
                     body=chunk,
-                    from_=jarvis_phone_number,
+                    from_=john_phone_number,
                     to=phone_number
                 )
 
