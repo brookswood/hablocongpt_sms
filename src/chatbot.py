@@ -4,6 +4,7 @@ import openai
 import hablar
 from sherlock import sherlock
 from jarvis import jarvis
+from john import john
 
 load_dotenv()
 openai.api_key = os.environ.get('OPENAI_KEY')
@@ -17,6 +18,7 @@ start_jarvis_chat_log = jarvis.chat_log
 start_hablar_chat_log = hablar.hablar.chat_log
 start_sherlock_chat_log = sherlock.chat_log
 start_hablar_translate_chat_log = hablar.hablarTranslate.chat_translate_log
+start_john_chat_log = john.chat_log
 
 def askgpt(question, chat_log=None):
     
@@ -62,3 +64,12 @@ def asksherlock(question, sherlock_chat_log=None):
     answer = response.choices[0]['message']['content']
     sherlock_chat_log = sherlock_chat_log + [{'role': 'assistant', 'content': answer}]
     return answer, sherlock_chat_log
+
+def askjohn(question, john_chat_log=None):
+    if john_chat_log is None:
+        john_chat_log = start_john_chat_log
+    john_chat_log = john_chat_log + [{'role': 'user', 'content': question}]
+    response = completion.create(model='gpt-3.5-turbo', messages=john_chat_log)
+    answer = response.choices[0]['message']['content']
+    john_chat_log = john_chat_log + [{'role': 'assistant', 'content': answer}]
+    return answer, john_chat_log

@@ -93,7 +93,7 @@ def sms_reply():
             incoming_msg = request.values['Body']
             chat_log = session.get('john_chat_log')
 
-            answer, chat_log = ch.askgpt(incoming_msg, chat_log)
+            answer, chat_log = ch.askjohn(incoming_msg, chat_log)
             session['john_chat_log'] = chat_log
     
             print(f'sending answer to {user}')
