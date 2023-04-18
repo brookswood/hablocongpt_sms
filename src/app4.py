@@ -1,6 +1,7 @@
 from functools import wraps
 from flask import Flask, request, session, abort, jsonify
 from twilio.twiml.messaging_response import MessagingResponse
+from twilio.request_validator import RequestValidator
 from twilio.rest import Client
 from pymongo import MongoClient
 from dotenv import load_dotenv
