@@ -65,7 +65,7 @@ def asksherlock(question, sherlock_chat_log=None):
     sherlock_chat_log = sherlock_chat_log + [{'role': 'assistant', 'content': answer}]
     return answer, sherlock_chat_log
 
-def askjohn(question, john_chat_log=None):
+def askjohn(question, johns_chat_log=None):
     if johns_chat_log is None:
         johns_chat_log = start_johns_chat_log
     johns_chat_log = johns_chat_log + [{'role': 'user', 'content': question}]
