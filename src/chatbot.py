@@ -5,6 +5,7 @@ import hablar
 from sherlock import sherlock
 from jarvis import jarvis
 from john import john
+import time
 
 load_dotenv()
 openai.api_key = os.environ.get('OPENAI_KEY')
@@ -29,7 +30,15 @@ def askgpt(question, chat_log=None):
     try:
         response = completion.create(model='gpt-3.5-turbo', messages=chat_log)
     except:
-        answer = 'Wow! \U0001F632\U0001F64B\U0001F3C3\U0001F4BC Due to high demand I am busy, can you ask your question again in just a sec?'
+        time.sleep(0.1)
+        try: 
+            response = completion.create(model='gpt-3.5-turbo', messages=chat_log)
+        except:
+            time.sleep(0.1)
+            try:
+                response = completion.create(model='gpt-3.5-turbo', messages=chat_log)  
+            except:
+                answer = 'Wow! \U0001F632\U0001F64B\U0001F3C3\U0001F4BC Due to high demand I am busy, can you ask your question again in just a sec?'
     else:
         answer = response.choices[0]['message']['content']
     chat_log = chat_log + [{'role': 'assistant', 'content': answer}]
