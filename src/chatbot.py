@@ -38,10 +38,16 @@ def askgpt(question, chat_log=None):
             try:
                 response = completion.create(model='gpt-3.5-turbo', messages=chat_log)  
             except:
-                answer = 'Wow! \U0001F632\U0001F64B\U0001F3C3\U0001F4BC Due to high demand I am busy, can you ask your question again in just a sec?'
+                answer = 'Wow! \U0001F632\U0001F64B\U0001F3C3\U0001F4BC Due to high demand I am busy, can you ask your question again in 5 seconds?'
+            else:
+                answer = response.choices[0]['message']['content']
+                chat_log = chat_log + [{'role': 'assistant', 'content': answer}]
+        else:
+            answer = response.choices[0]['message']['content']
+            chat_log = chat_log + [{'role': 'assistant', 'content': answer}]
     else:
         answer = response.choices[0]['message']['content']
-    chat_log = chat_log + [{'role': 'assistant', 'content': answer}]
+        chat_log = chat_log + [{'role': 'assistant', 'content': answer}]
     # print(f'this is chatlog {chat_log}')
     return answer, chat_log
 
