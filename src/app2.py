@@ -187,6 +187,8 @@ def sms_reply():
             except:
                 print('keys do not exist yet')
                 update_user(phone_number, 'stage', 'agree')
+                resp.message("Our Terms of Service and Privacy Policy have recently updated, you can read them here https://beta.convowithgpt.com/terms-of-service/ & https://beta.convowithgpt.com/privacy-policy/. Please respond with 'yes' or 'agree'. By continuing to send messages to this service, you are agreeing to Our Terms of Service.")
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
