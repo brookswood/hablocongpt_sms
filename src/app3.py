@@ -141,11 +141,11 @@ def sms_reply():
                     resp.message("User registration rejected, we are currently only enrolling users 18 or older.")
                     print(f'Error! User {phone_number}too young to sign up')
         else:
-            if user['agree'] is None:
-                agree = 'empty'
-            else:
+            try:
                 agree = user['agree']
-            age = user['age']
+                age = user['age']
+            except:
+                print('keys do not exist yet')
             if agree == 'yes' or agree == 'agree':
                 if age <= 18:
                     initial_response = 'gathering those details \U0001F50D \U0001F4DD \U0001F4CB now...' 
