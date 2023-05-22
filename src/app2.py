@@ -186,6 +186,7 @@ def sms_reply():
                 return str(resp)
             except:
                 print('keys do not exist yet')
+                update_user(phone_number, 'stage', 'agree')
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
