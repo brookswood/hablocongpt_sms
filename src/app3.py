@@ -10,6 +10,7 @@ import os
 import sherlock as sherlock
 from twilio.rest import Client
 from datetime import date
+from datetime import datetime
 import time 
 
 # Load environment variables from the .env file
@@ -81,6 +82,14 @@ def calculate_age(born):
     today = date.today()
     return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
+def validate_date_format(date_string, date_format):
+    try:
+        datetime.strptime(date_string, date_format)
+        return True
+    except ValueError:
+        return False
+
+
 @app.route('/sms', methods=['POST'])
 @validate_twilio_request
 def sms_reply():
@@ -119,15 +128,18 @@ def sms_reply():
             resp.message("Thank you! Please reply with your birthdate. in the format of month day year 01-01-2023")
         elif stage == 'dob':
             born = message_body
-            age = calculate_age(born)
-            if born <= 18:
-                update_user(phone_number, 'dob', message_body)
-                update_user(phone_number, 'age', age)
-                update_user(phone_number, 'stage', 'name') 
-                resp.message("Registration complete! Thank you for providing your information and using Sherlock from https://beta.convoswithgpt.com/sherlock ask me a question and I'll do my best to get you an answer.  I am in beta right now and may not always respond from time to time.  Be sure to send the message \U0001F4AC of 'Hi'.  This will get my attention \U0001FAE1 so I can answer your questions.  MSG&Data rates may apply.  Reply HElP for help, STOP to cancel.")
-            else:
-                resp.message("User registration rejected, we are currently only enrolling users 18 or older.")
-                print(f'Error! User {phone_number}too young to sign up')
+            #check date format
+            date_format = "%m-%d-%Y"
+            if validate_date_format(born, date_format) == True:
+                age = calculate_age(born)
+                if born <= 18:
+                    update_user(phone_number, 'dob', message_body)
+                    update_user(phone_number, 'age', age)
+                    update_user(phone_number, 'stage', 'name') 
+                    resp.message("Registration complete! Thank you for providing your information and using Sherlock. from https://beta.convoswithgpt.com/jarvis ask me a question and I'll do my best to get you an answer.  I am in beta right now and may not always respond from time to time.  Be sure to send the message \U0001F4AC of 'Hi'.  This will get my attention \U0001FAE1 so I can answer your questions.  MSG&Data rates may apply.  Reply HElP for help, STOP to cancel.")
+                else:
+                    resp.message("User registration rejected, we are currently only enrolling users 18 or older.")
+                    print(f'Error! User {phone_number}too young to sign up')
         else:
             agree = user['agree']
             age = user['age']
