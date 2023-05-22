@@ -124,7 +124,7 @@ def sms_reply():
                 update_user(phone_number, 'dob', message_body)
                 update_user(phone_number, 'age', age)
                 update_user(phone_number, 'stage', 'name') 
-                resp.message("Registration complete! Thank you for providing your information and using J.A.R.V.I.S. from https://convoswithgpt.com/jarvis ask me a question and I'll do my best to get you an answer.  I am in beta right now and may not always respond from time to time.  Be sure to send the message \U0001F4AC of 'Hi'.  This will get my attention \U0001FAE1 so I can answer your questions.  MSG&Data rates may apply.  Reply HElP for help, STOP to cancel.")
+                resp.message("Registration complete! Thank you for providing your information and using J.A.R.V.I.S. from https://beta.convoswithgpt.com/jarvis ask me a question and I'll do my best to get you an answer.  I am in beta right now and may not always respond from time to time.  Be sure to send the message \U0001F4AC of 'Hi'.  This will get my attention \U0001FAE1 so I can answer your questions.  MSG&Data rates may apply.  Reply HElP for help, STOP to cancel.")
             else:
                 resp.message("User registration rejected, we are currently only enrolling users 18 or older.")
                 print(f'Error! User {phone_number}too young to sign up')
