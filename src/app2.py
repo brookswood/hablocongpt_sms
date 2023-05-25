@@ -106,6 +106,8 @@ def sms_reply():
         # If the user does not exist, create a new account and ask for their name
         create_user(phone_number)
         update_user(phone_number, 'stage', 'name')
+        update_user(phone_number, 'dob', '')
+        update_user(phone_number, 'agree', '')
         resp.message("It looks like you are new around here!  I'm J.A.R.V.I.S., your friendly and helpful A.I. assistant. Please respond with your name")
     else:
         # If the user exists, check the expected input based on the user's stage
