@@ -142,54 +142,54 @@ def sms_reply():
                     resp.message("User registration rejected, we are currently only enrolling users 18 or older.")
                     print(f'Error! User {phone_number}too young to sign up')
         else:
-            try:
-                agree = user['agree']
-                age = user['age']
-                if agree == 'yes' or agree == 'agree':
-                    if age <= 18:
-                        initial_response = 'gathering those details \U0001F50D \U0001F4DD \U0001F4CB now...' 
+            # try:
+            agree = user['agree']
+            age = user['age']
+            if agree == 'yes' or agree == 'agree':
+                if age <= 18:
+                    initial_response = 'gathering those details \U0001F50D \U0001F4DD \U0001F4CB now...' 
+                    twilio_client.messages.create(
+                        body=initial_response,
+                        from_=jarvis_phone_number,
+                        to=phone_number
+                    )
+
+                    incoming_msg = request.values['Body']
+                    chat_log = session.get('jarivs_chat_log')
+
+                    answer, chat_log = ch.askgpt(incoming_msg, chat_log)
+                    session['jarvis_chat_log'] = chat_log
+            
+                    print(f'sending answer to {user}')
+                    # print(answer)
+
+                    # Define the maximum number of characters per SMS message
+                    max_chars = 1500
+
+                    # Split the response into chunks if it exceeds the maximum character limit
+                    response_chunks = [answer[i:i + max_chars] for i in range(0, len(answer), max_chars)]
+
+                    # Send each chunk as a separate SMS message
+                    for chunk in response_chunks:
+                        time.sleep(0.02)
                         twilio_client.messages.create(
-                            body=initial_response,
+                            body=chunk,
                             from_=jarvis_phone_number,
                             to=phone_number
                         )
 
-                        incoming_msg = request.values['Body']
-                        chat_log = session.get('jarivs_chat_log')
-
-                        answer, chat_log = ch.askgpt(incoming_msg, chat_log)
-                        session['jarvis_chat_log'] = chat_log
-                
-                        print(f'sending answer to {user}')
-                        # print(answer)
-
-                        # Define the maximum number of characters per SMS message
-                        max_chars = 1500
-
-                        # Split the response into chunks if it exceeds the maximum character limit
-                        response_chunks = [answer[i:i + max_chars] for i in range(0, len(answer), max_chars)]
-
-                        # Send each chunk as a separate SMS message
-                        for chunk in response_chunks:
-                            time.sleep(0.02)
-                            twilio_client.messages.create(
-                                body=chunk,
-                                from_=jarvis_phone_number,
-                                to=phone_number
-                            )
-
-                            print(f'this is chunk {chunk}')
-                else:
-                    print('user has not yet agreed to TOS')
-                    # update_user(phone_number, 'agree', message_body)
-                    update_user(phone_number, 'stage', 'agree')
-                    resp.message("Our Terms of Service and Privacy Policy have recently updated, you can read them here https://beta.convowithgpt.com/terms-of-service/ & https://beta.convowithgpt.com/privacy-policy/. Please respond with 'yes' or 'agree'. By continuing to send messages to this service, you are agreeing to Our Terms of Service.")
-
-                #return str(resp)
-            except:
-                print('keys do not exist yet')
+                        print(f'this is chunk {chunk}')
+            else:
+                print('user has not yet agreed to TOS')
+                # update_user(phone_number, 'agree', message_body)
                 update_user(phone_number, 'stage', 'agree')
                 resp.message("Our Terms of Service and Privacy Policy have recently updated, you can read them here https://beta.convowithgpt.com/terms-of-service/ & https://beta.convowithgpt.com/privacy-policy/. Please respond with 'yes' or 'agree'. By continuing to send messages to this service, you are agreeing to Our Terms of Service.")
+
+                #return str(resp)
+            # except:
+            #     print('keys do not exist yet')
+            #     update_user(phone_number, 'stage', 'agree')
+            #     resp.message("Our Terms of Service and Privacy Policy have recently updated, you can read them here https://beta.convowithgpt.com/terms-of-service/ & https://beta.convowithgpt.com/privacy-policy/. Please respond with 'yes' or 'agree'. By continuing to send messages to this service, you are agreeing to Our Terms of Service.")
         return str(resp)
 
 if __name__ == '__main__':
