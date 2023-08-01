@@ -9,6 +9,10 @@ import chatbot as ch
 import os
 import jarvis as jarvis
 import sherlock as sherlock
+import hablar as hablar
+import john as john
+import sonya as sonya
+
 from twilio.rest import Client
 from datetime import date
 from datetime import datetime, timedelta
@@ -183,6 +187,43 @@ def sherlock_run():
     except KeyError:
         return('Unauthorized', 401)
 
+@app.route('/sonya', methods=['POST'])
+# @validate_twilio_request
+def sonia_run():
+    bot_name = 'sonya'
+    try:
+        twil_sig = request.headers['X-Twilio-Signature']
+        print(f"X-Twilio-Signature: {twil_sig}")
+        phone_number = request.form['From']
+        message_body = request.form['Body']
+        chat_log_name = 'sonya_chat_log'
+        sms_number = os.environ.get('SONYA_PHONE_NUMBER')
+        print(f'this is sms_reply details: {phone_number} {message_body} {chat_log_name} {sms_number}')
+        msg_reply = sms_reply(phone_number, message_body, chat_log_name, sms_number, bot_name)
+        print(msg_reply)
+        return (msg_reply)
+    except KeyError:
+        return('Unauthorized', 401)
+
+@app.route('/john', methods=['POST'])
+# @validate_twilio_request
+def sonia_run():
+    bot_name = 'john'
+    try:
+        twil_sig = request.headers['X-Twilio-Signature']
+        print(f"X-Twilio-Signature: {twil_sig}")
+        phone_number = request.form['From']
+        message_body = request.form['Body']
+        chat_log_name = 'john_chat_log'
+        sms_number = os.environ.get('JOHN_PHONE_NUMBER')
+        print(f'this is sms_reply details: {phone_number} {message_body} {chat_log_name} {sms_number}')
+        msg_reply = sms_reply(phone_number, message_body, chat_log_name, sms_number, bot_name)
+        print(msg_reply)
+        return (msg_reply)
+    except KeyError:
+        return('Unauthorized', 401)
+
+
 def sms_reply(phone_number, message_body, chat_log_name, sms_number, bot_name):
     if bot_name == 'jarvis':
         signup_new = jarvis.jarvis.signup_new
@@ -194,15 +235,15 @@ def sms_reply(phone_number, message_body, chat_log_name, sms_number, bot_name):
         signup_complete = sherlock.sherlock.signup_complete
         questions = sherlock.sherlock.questions
         print('sherlock')
-    elif bot_name == 'sonia':
-        signup_new = jarvis.jarvis.signup_new
-        signup_complete = jarvis.jarvis.signup_complete
-        questions = jarvis.jarvis.questions
-        print('sonia')
+    elif bot_name == 'sonya':
+        signup_new = sonya.hablarTranslate.signup_new
+        signup_complete = sonya.hablarTranslate.signup_complete
+        questions = sonya.hablarTranslate.questions
+        print('sonya')
     elif bot_name == 'john':
-        signup_new = jarvis.jarvis.signup_new
-        signup_complete = jarvis.jarvis.signup_complete
-        questions = jarvis.jarvis.questions
+        signup_new = john.john.signup_new
+        signup_complete = john.john.signup_complete
+        questions = john.john.questions
         print('john')
 
     # Check if the user exists in the database
