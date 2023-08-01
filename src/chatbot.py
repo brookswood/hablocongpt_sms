@@ -10,6 +10,7 @@ import time
 load_dotenv()
 openai.api_key = os.environ.get('OPENAI_KEY')
 completion = openai.ChatCompletion()
+imGen = openai.Image()
 
 start_chat_log = [
     {"role": "system", "content": "You are a helpful assistant."},
@@ -88,3 +89,7 @@ def askjohn(question, john1_chat_log=None):
     answer = response.choices[0]['message']['content']
     john1_chat_log = john1_chat_log + [{'role': 'assistant', 'content': answer}]
     return answer, john1_chat_log
+
+def imageGen(image_prompt):
+    response = imGen.create(prompt=image_prompt,n=1,size="1024x1024")
+    return (response["data"][0]["url"])
