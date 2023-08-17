@@ -27,14 +27,19 @@ def askgpt(question, chat_log_name, chat_log=None):
     if chat_log is None:
         if chat_log_name == 'jarvis_chat_log':
             chat_log = start_jarvis_chat_log
+            print('jarvis start log')
         elif chat_log_name == 'sherlock_chat_log':
             chat_log = start_sherlock_chat_log
+            print('sherlock start log')
         elif chat_log_name == 'hablar_chat_log':
             chat_log = start_hablar_chat_log
+            print('hablar start log')
         elif chat_log_name == 'hablar_translate_chat_log':
             chat_log = start_hablar_translate_chat_log
+            print('hablar translate start log')
         elif chat_log_name == 'john_chat_log':
             chat_log = start_john1_chat_log
+            print('john start log')
     chat_log = chat_log + [{'role': 'user', 'content': question}]
     
     try:
