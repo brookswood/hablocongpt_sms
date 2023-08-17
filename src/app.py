@@ -439,7 +439,7 @@ def sms_reply(phone_number, message_body, chat_log_name, sms_number, bot_name):
 
                                     chat_log = session.get(chat_log_name)
 
-                                    answer, chat_log = ch.askgpt(incoming_msg, chat_log)
+                                    answer, chat_log = ch.askgpt(incoming_msg, chat_log_name, chat_log)
                                     session[chat_log_name] = chat_log
                             
                                     print(f'sending answer to {user}')
