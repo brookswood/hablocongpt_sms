@@ -63,7 +63,7 @@ def askgpt(question, chat_log_name, chat_log=None):
     else:
         answer = response.choices[0]['message']['content']
         chat_log = chat_log + [{'role': 'assistant', 'content': answer}]
-    # print(f'this is chatlog {chat_log}')
+    print(f'this is chatlog {chat_log}')
     return answer, chat_log
 
 def askhablar(question, hablar_chat_log=None):
