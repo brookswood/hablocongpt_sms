@@ -207,7 +207,7 @@ def sonia_run():
 
 @app.route('/john', methods=['POST'])
 # @validate_twilio_request
-def sonia_run():
+def john_run():
     bot_name = 'john'
     try:
         twil_sig = request.headers['X-Twilio-Signature']
